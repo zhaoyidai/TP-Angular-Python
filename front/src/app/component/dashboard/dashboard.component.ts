@@ -52,6 +52,8 @@ export class DashboardComponent implements OnInit {
         this.interventionArr = data; // Assign the received data to the interventionArr array
         // console.log(this.interventionArr); // Log the received data to the console
         this.sortInterventions();
+        
+
       },
       error => {
         console.error('Error fetching interventions:', error); // Log any errors to the console
@@ -153,6 +155,26 @@ export class DashboardComponent implements OnInit {
     // Note: Months are 0-indexed in JavaScript Dates, so we subtract 1 from the month
     return new Date(year, month - 1, day);
   }
+
+  isDateBeforeToday(date_intervention: string): boolean {
+    // Parse the date string to a Date object
+    const interventionDate = this.getDateFromString(date_intervention);
+    if (!interventionDate || interventionDate.getTime() === 0) {
+      return true;
+    }
+    // Create a new Date object for today's date
+    const today = new Date();
+  
+    // Set the time parts of today's date to 0 (midnight)
+    today.setHours(0, 0, 0, 0);
+  
+    // Set the time parts of the intervention date to 0 (midnight)
+    interventionDate.setHours(0, 0, 0, 0);
+  
+    // Compare the intervention date with today's date
+    return interventionDate < today;
+  }
+  
   
   
 
