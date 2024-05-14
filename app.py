@@ -43,13 +43,24 @@ def create_intervention():
     if not libelle:
         return jsonify({'message': 'Libelle cannot be empty'}), 400
 
+    if date_intervention:
 
-
-    intervention = Intervention(libelle=libelle,
-                                description=description,
-                                nom_intervenant=nom_intervenant,
-                                lieu=lieu,
-                                date_intervention=datetime.strptime(date_intervention, '%d/%m/%Y'))
+        intervention = Intervention(
+            libelle=libelle,
+            description=description,
+            nom_intervenant=nom_intervenant,
+            lieu=lieu,
+            date_intervention=datetime.strptime(date_intervention, '%d/%m/%Y')
+        )
+    else:
+        # Handle the case where date_intervention is empty (e.g., set it to None)
+        intervention = Intervention(
+            libelle=libelle,
+            description=description,
+            nom_intervenant=nom_intervenant,
+            lieu=lieu,
+            date_intervention=None  # or any other default value you want to assign
+        )
     db.session.add(intervention)
     db.session.commit()
     return jsonify({'message': 'Intervention created'})
@@ -60,13 +71,20 @@ def get_interventions():
     if not interventions:
         return jsonify({'message': 'empty table'}), 400
 
-    return jsonify([{'id': intervention.id,
-                     'libelle': intervention.libelle,
-                     'description': intervention.description,
-                     'nom_intervenant': intervention.nom_intervenant,
-                     'lieu': intervention.lieu,
-                     'date_intervention': intervention.date_intervention.strftime('%d/%m/%Y')
-                     } for intervention in interventions])
+    data = []
+    for intervention in interventions:
+        intervention_data = {
+            'id': intervention.id,
+            'libelle': intervention.libelle,
+            'description': intervention.description,
+            'nom_intervenant': intervention.nom_intervenant,
+            'lieu': intervention.lieu,
+            'date_intervention': intervention.date_intervention.strftime(
+                '%d/%m/%Y') if intervention.date_intervention else None
+        }
+        data.append(intervention_data)
+
+    return jsonify(data)
 
 @app.route('/interventions/<int:id>', methods=['PUT'])
 def update_intervention(id):

@@ -13,10 +13,32 @@
 
                 <div class="shadow">
                     <div class="input-group p-4">
-                        <input type="text" class="form-control" placeholder="Enter libelle " name="libelle" >
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Libellé</label>
+                            <input type="test" class="form-control" placeholder="Enter libelle " [(ngModel)]="addLibelleValue">
+                        </div>
+                          <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control" placeholder="Enter description " [(ngModel)]="addDescriptionValue">
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Nom d'intervenant</label>
+                            <input type="text" class="form-control" placeholder="Enter nom_intervenant " [(ngModel)]="addNom_intervenantValue">
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Lieu</label>
+                            <input type="text" class="form-control" placeholder="Enter lieu " [(ngModel)]="addLieuValue">
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="text" class="form-control" placeholder="dd/mm/yyyy" [(ngModel)]="addDateValue">
+                          </div>
+                          
+                         
                        
-                       
-                        <button class="btn btn-outline-success" type="button">+</button>
+                        <button class="btn btn-primary" type="button" (click)="addIntervention()">Ajouter</button>
+                    
                       </div>
                 </div>
                 
@@ -28,13 +50,40 @@
                        <div class="p-2 shadow border">
                            <div class="input-group row ps-3" >
                                <div class="card col-md-10 border-0"> {{intervention.libelle}} </div>
-                               <button class="btn btn-outline-primary col me-2" >e</button>
+                               <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(intervention)" >e</button>
                                <div class="btn btn-outline-danger col" (click)="deleteIntervention(intervention)">X</div>
 
                            </div>
                        </div>
                    </div>
                </div>
+
+               <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Intervention</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group p-4">
+                            <p><label>Libellé</label>
+                                <input type="text" class="form-control" placeholder="Enter libelle " name="libelle" [(ngModel)]="editLibelleValue"></p>
+                            <p><label>Description</label>
+                            <input type="text" class="form-control" placeholder="Enter description " name="description" [(ngModel)]="editDescriptionValue">
+                        </p><p><label>Nom intervenant</label>
+                            <input type="text" class="form-control" placeholder="Enter nom_intervenant " name="nom_intervenant" [(ngModel)]="editNom_intervenantValue">
+                        </p><p><label>Lieu</label>
+                            <input type="text" class="form-control" placeholder="Enter lieu " name="lieu" [(ngModel)]="editLieuValue">
+                        </p><p><label>Date</label>
+                            <input type="text" class="form-control" placeholder="Enter date_intervention " name="date_intervention" [(ngModel)]="editDateValue">
+                            <button class="btn btn-outline-success" type="button" data-bs-dismiss="modal" (click)="editIntervention()">Update</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
 
 
             </div>
