@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CrudService } from '../../service/crud.service';
 import { Intervention } from '../../model/intervention'; // imported the Intervention model
+import { error } from 'console';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +28,18 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching interventions:', error); // Log any errors to the console
       }
     );
+  }
+
+  deleteIntervention(eintervention : Intervention) {
+    this.crudService.deleteIntervention(eintervention).subscribe(
+      res=>{
+        this.ngOnInit();
+        console.log(res);
+      },error=>{
+        
+        console.error('Error fetching interventions:', error);
+      }
+    )
   }
 
 }

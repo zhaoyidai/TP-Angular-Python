@@ -15,5 +15,8 @@ export class CrudService {
    getAllIntervention():Observable<Intervention[]>{
     return this.http.get<Intervention[]>(this.serviceURL);
   }
+  deleteIntervention(intervention : Intervention):Observable<any>{
+    return this.http.delete<Intervention>(`${this.serviceURL}/${intervention.id}`);
+  }
 
 }
