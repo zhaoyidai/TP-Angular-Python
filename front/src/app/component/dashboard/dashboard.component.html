@@ -3,7 +3,6 @@
  
  
         <div class="row mt-4" style="height: 500px;">
-            <div class="col"></div>
             <div class="col-md-6 bg-white shadow">
  
  
@@ -44,12 +43,12 @@
                 
                 <h4 class="text-primary mt-4">Interventions : </h4>
 
-
+                <button type="button" class="btn btn-outline-secondary" (click)="ngOnInit()">Order</button>
                <div style="overflow-y: auto; height: 350px;">
                    <div class="m-3" *ngFor="let intervention of interventionArr">
                        <div class="p-2 shadow border">
                            <div class="input-group row ps-3" >
-                               <div class="card col-md-10 border-0"> {{intervention.libelle}} </div>
+                               <div class="card col-md-10 border-0"> {{intervention.libelle}}  {{intervention.date_intervention}} </div>
                                <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(intervention)" >e</button>
                                <div class="btn btn-outline-danger col" (click)="deleteIntervention(intervention)">X</div>
 

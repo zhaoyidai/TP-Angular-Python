@@ -94,7 +94,10 @@ def update_intervention(id):
     description = data['description']
     nom_intervenant = data['nom_intervenant']
     lieu = data['lieu']
-    date_intervention = datetime.strptime(data['date_intervention'], '%d/%m/%Y')
+    if data['date_intervention']:
+        date_intervention = datetime.strptime(data['date_intervention'], '%d/%m/%Y')
+    else:
+        date_intervention=None
 
     intervention.libelle = libelle
     intervention.description = description
