@@ -11,3 +11,5 @@ to run front-end:
 `cd front`
 
 `npm install`
+
+Or open `front/dist/front/browser/index.html` to see the prod mode
