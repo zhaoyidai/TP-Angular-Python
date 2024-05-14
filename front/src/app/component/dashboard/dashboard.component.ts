@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
     this.crudService.getAllIntervention().subscribe(
       (data: Intervention[]) => {
         this.interventionArr = data; // Assign the received data to the interventionArr array
-        console.log(this.interventionArr); // Log the received data to the console
+        // console.log(this.interventionArr); // Log the received data to the console
       },
       error => {
         console.error('Error fetching interventions:', error); // Log any errors to the console

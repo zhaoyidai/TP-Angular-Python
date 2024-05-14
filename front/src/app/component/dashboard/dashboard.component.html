@@ -24,10 +24,10 @@
 
 
                <div style="overflow-y: auto; height: 350px;">
-                   <div class="m-3">
+                   <div class="m-3" *ngFor="let intervention of interventionArr">
                        <div class="p-2 shadow border">
                            <div class="input-group row ps-3" >
-                               <div class="card col-md-10 border-0"> Testdata </div>
+                               <div class="card col-md-10 border-0"> {{intervention.libelle}} </div>
                                <button class="btn btn-outline-primary col me-2" >e</button>
                                <div class="btn btn-outline-danger col" >X</div>
 
