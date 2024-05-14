@@ -16,16 +16,16 @@ class Intervention(db.Model):
     date_intervention = db.Column(db.DateTime, nullable=True)
 
 
-@app.before_first_request
-# init table
-def create_tables():
-    db.create_all()
-
-    # Add an example intervention to the database
-    example_intervention = Intervention(libelle='Example intervention', description='This is an example intervention',
-                                       nom_intervenant='Zhaoyi', lieu='France', date_intervention=datetime.now())
-    db.session.add(example_intervention)
-    db.session.commit()
+# @app.before_first_request
+# # init table
+# def create_tables():
+#     db.create_all()
+#
+#     # Add an example intervention to the database
+#     example_intervention = Intervention(libelle='Example intervention', description='This is an example intervention',
+#                                        nom_intervenant='Zhaoyi', lieu='France', date_intervention=datetime.now())
+#     db.session.add(example_intervention)
+#     db.session.commit()
 
 
 @app.route('/interventions', methods=['POST'])
