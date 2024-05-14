@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit {
     // Parse the date string to a Date object
     const interventionDate = this.getDateFromString(date_intervention);
     if (!interventionDate || interventionDate.getTime() === 0) {
-      return true;
+      return false;
     }
     // Create a new Date object for today's date
     const today = new Date();
@@ -173,6 +173,19 @@ export class DashboardComponent implements OnInit {
   
     // Compare the intervention date with today's date
     return interventionDate < today;
+  }
+
+  getBadgeInfo(intervention: Intervention): { text: string, class: string } {
+    if (!intervention.libelle || !intervention.description || !intervention.nom_intervenant || !intervention.lieu || !intervention.date_intervention) {
+      return { text: 'Brouillon', class: 'text-bg-secondary' };
+    }
+
+    
+    if (this.isDateBeforeToday(intervention.date_intervention)) {
+      return { text: 'Terminé', class: 'text-bg-primary' };
+    } else {
+      return { text: 'Validé', class: 'text-bg-success' };
+    }
   }
   
   
