@@ -14,4 +14,4 @@ and run `app.py`
 
 `npm install`
 
-Or open `front/dist/front/browser/index.html` to see the prod mode of front-end
+and run `ng serve`
