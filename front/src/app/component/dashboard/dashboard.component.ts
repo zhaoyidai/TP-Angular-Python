@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CrudService } from '../../service/crud.service';
 import { Intervention } from '../../model/intervention';
 import { error } from 'console';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -36,9 +37,11 @@ export class DashboardComponent implements OnInit {
         
 
       },
-      error => {
-        console.error('Error fetching interventions:', error); // Log any errors to the console
-      }
+      (error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          alert("No data found");
+          }
+        }
     );
   }
 
@@ -49,7 +52,7 @@ export class DashboardComponent implements OnInit {
         console.log(res);
       },error=>{
         
-        console.error('Error fetching interventions:', error);
+        console.error('Error deleting interventions:', error.error);
       }
     )
   }
@@ -58,10 +61,12 @@ export class DashboardComponent implements OnInit {
     
     this.crudService.addIntervention(this.interventionObj).subscribe(
       res=>{
-        this.ngOnInit();
         
+        this.ngOnInit();
+        alert(res.message);
       },err =>{
-        alert(err.name);
+        
+        alert(err.error.message);
       }
     )
   }
@@ -70,6 +75,7 @@ export class DashboardComponent implements OnInit {
     
     this.crudService.editIntervention(this.interventionObjedit).subscribe(res=>{
       this.ngOnInit();
+      alert(res.message);
     },err=>{
       alert("Failed to update");
     })

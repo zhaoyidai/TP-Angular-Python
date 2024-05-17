@@ -20,15 +20,8 @@ class Intervention(db.Model):
 
 
 # @app.before_first_request
-# # init table
-# def create_tables():
-#     db.create_all()
-#
-#     # Add an example intervention to the database
-#     example_intervention = Intervention(libelle='Example intervention', description='This is an example intervention',
-#                                        nom_intervenant='Zhaoyi', lieu='France', date_intervention=datetime.now())
-#     db.session.add(example_intervention)
-#     db.session.commit()
+# # init table if no db
+
 
 
 @app.route('/interventions', methods=['POST'])
@@ -53,23 +46,24 @@ def create_intervention():
             date_intervention=datetime.strptime(date_intervention, '%d/%m/%Y')
         )
     else:
-        # Handle the case where date_intervention is empty (e.g., set it to None)
+        # where date_intervention is empty
         intervention = Intervention(
             libelle=libelle,
             description=description,
             nom_intervenant=nom_intervenant,
             lieu=lieu,
-            date_intervention=None  # or any other default value you want to assign
+            date_intervention=None
         )
     db.session.add(intervention)
     db.session.commit()
-    return jsonify({'message': 'Intervention created'})
+    return jsonify({'message': 'Intervention created'}), 201
+
 
 @app.route('/interventions', methods=['GET'])
 def get_interventions():
     interventions = Intervention.query.all()
     if not interventions:
-        return jsonify({'message': 'empty table'}), 400
+        return jsonify({'message': 'empty table'}), 404
 
     data = []
     for intervention in interventions:
@@ -84,7 +78,8 @@ def get_interventions():
         }
         data.append(intervention_data)
 
-    return jsonify(data)
+    return jsonify(data), 200
+
 
 @app.route('/interventions/<int:id>', methods=['PUT'])
 def update_intervention(id):
@@ -94,27 +89,30 @@ def update_intervention(id):
     description = data['description']
     nom_intervenant = data['nom_intervenant']
     lieu = data['lieu']
+    if not data['libelle']:
+        return jsonify({'message': 'Libelle cannot be empty'}), 400
     if data['date_intervention']:
-        date_intervention = datetime.strptime(data['date_intervention'], '%d/%m/%Y')
+        date_intervention = datetime.strptime(
+            data['date_intervention'], '%d/%m/%Y')
     else:
-        date_intervention=None
+        date_intervention = None
 
     intervention.libelle = libelle
     intervention.description = description
     intervention.nom_intervenant = nom_intervenant
     intervention.lieu = lieu
     intervention.date_intervention = date_intervention
-
-
     db.session.commit()
-    return jsonify({'message': 'Intervention updated'})
+    return jsonify({'message': 'Intervention updated'}), 200
+
 
 @app.route('/interventions/<int:id>', methods=['DELETE'])
 def delete_intervention(id):
     intervention = Intervention.query.get_or_404(id)
     db.session.delete(intervention)
     db.session.commit()
-    return jsonify({'message': 'Intervention deleted'})
+    return jsonify({'message': 'Intervention deleted'}), 200
+
 
 if __name__ == '__main__':
     db.create_all()
