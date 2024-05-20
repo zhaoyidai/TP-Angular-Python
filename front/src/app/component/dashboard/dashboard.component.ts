@@ -11,28 +11,29 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  interventionObj:Intervention = new Intervention;
-  interventionArr: Intervention[] = [];
-  interventionObjedit:Intervention = new Intervention;
+  interventionObj:Intervention = new Intervention; // Objet intervention pour add
+  interventionArr: Intervention[] = []; // Tableau pour stocker les interventions récupérées
+  interventionObjedit:Intervention = new Intervention; // Objet intervention pour edit
   
-  
+  // Indicateur pour le tri ascendant/descendant
   sortAscending : boolean = true;
   constructor(private crudService: CrudService) { }
 
   ngOnInit(): void {
-    
-    
+    // Méthode exécutée à l'initialisation du composant
+    // Initialisation des objets et du tableau
     this.interventionObj=new Intervention();
     this.interventionArr=[];
-    
+    // Récupérer toutes les interventions
     this.getAllIntervention(); 
   }
 
+  // Méthode pour récupérer toutes les interventions
   getAllIntervention() {
     this.crudService.getAllIntervention().subscribe(
       (data: Intervention[]) => {
         this.interventionArr = data; // Assign the received data to the interventionArr array
-        
+        // Tri des interventions
         this.sortInterventions();
         
 
@@ -45,9 +46,11 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // Méthode pour supprimer une intervention
   deleteIntervention(eintervention : Intervention) {
     this.crudService.deleteIntervention(eintervention).subscribe(
       res=>{
+        // Recharger des interventions après suppression
         this.ngOnInit();
         console.log(res);
       },error=>{
@@ -57,11 +60,12 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+  // Méthode pour ajouter une intervention
   addIntervention(){
     
     this.crudService.addIntervention(this.interventionObj).subscribe(
       res=>{
-        
+        // Recharger des interventions après ajout
         this.ngOnInit();
         alert(res.message);
       },err =>{
@@ -71,9 +75,11 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+  // Méthode pour éditer une intervention
   editIntervention(){
     
     this.crudService.editIntervention(this.interventionObjedit).subscribe(res=>{
+      // Rechargement des interventions après édition
       this.ngOnInit();
       alert(res.message);
     },err=>{
@@ -81,13 +87,15 @@ export class DashboardComponent implements OnInit {
     })
   } 
 
+  // Méthode pour préparer popup edit
   call(eintervention : Intervention) {
     this.interventionObjedit = eintervention;
     this.sortAscending=!this.sortAscending;
   }
  
+  // Méthode pour trier les interventions
   sortInterventions(): void {
-    // Toggle the sorting order
+    // Trie le tableau interventionArr en fonction de la date d'intervention
     this.sortAscending = !this.sortAscending;
   
     // Sort the interventions array based on the date_intervention property

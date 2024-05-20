@@ -9,7 +9,7 @@
                 <div class="card bg-warning mt-4">
                     <h4 class="text-white p-3 pt-2 pb-2">Intervention App</h4>
                 </div>
-
+                <!-- Form to add new intervention -->
                 <div class="shadow">
                     <div class="input-group p-4">
                         
@@ -35,29 +35,35 @@
                           </div>
                           
                          
-                       
+                        <!-- Button to add a new intervention -->
                         <button class="btn btn-primary" type="button" (click)="addIntervention()">Ajouter</button>
                     
                       </div>
                 </div>
-                
-                <h4 class="text-primary mt-4">Interventions : </h4>
 
+                <!-- Section to list interventions -->
+                <h4 class="text-primary mt-4">Interventions : </h4>
+                <!-- Button to refresh+changer order(asc/desc) the list of interventions -->
                 <button type="button" class="btn btn-outline-secondary" (click)="ngOnInit()">Order</button>
                <div style="overflow-y: auto; height: 350px;">
                    <div class="m-3" *ngFor="let intervention of interventionArr">
                        <div class="p-2 shadow border">
+                        <!-- Badge indicating the status of the intervention -->
                         <span class="badge" [ngClass]="getBadgeInfo(intervention).class">{{ getBadgeInfo(intervention).text }}</span>
                            <div class="input-group row ps-3 " >
+                            <!-- Intervention details -->
                                <div class="card col-md-10 border-0"> {{intervention.libelle}}  {{intervention.date_intervention}} </div>
+                               <!-- Button to open edit the intervention popup -->
                                <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(intervention)" [disabled]="isDateBeforeToday(intervention.date_intervention)">e</button>
-                               <div class="btn btn-outline-danger col" (click)="deleteIntervention(intervention)">X</div>
+                               <!-- Button to delete the intervention -->
+                               <button class="btn btn-outline-danger col" (click)="deleteIntervention(intervention)">X</button>
 
                            </div>
                        </div>
                    </div>
                </div>
 
+               <!-- Modal for editing an intervention -->
                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
@@ -66,6 +72,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="ngOnInit()"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- Form to edit an intervention -->
                         <div class="input-group p-4">
                             <p><label>Libellé</label>
                                 <input type="text" class="form-control" placeholder="Enter libelle " name="libelle" [(ngModel)]="interventionObjedit.libelle" required></p>
@@ -77,6 +84,7 @@
                             <input type="text" class="form-control" placeholder="Enter lieu " name="lieu" [(ngModel)]="interventionObjedit.lieu">
                         </p><p><label>Date</label>
                             <input type="text" class="form-control" placeholder="Enter date_intervention " name="date_intervention" [(ngModel)]="interventionObjedit.date_intervention">
+                            <!-- Button to update the intervention -->
                             <button class="btn btn-outline-success" type="button" data-bs-dismiss="modal" (click)="editIntervention()">Update</button>
                         </div>
                     </div>
