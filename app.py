@@ -22,10 +22,49 @@ class Intervention(db.Model):
 # @app.before_first_request
 # # init table if no db
 
-
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'message': 'Intervention(s) not found'}), 404
 
 @app.route('/interventions', methods=['POST'])
 def create_intervention():
+    """
+        POST /add
+        Adds one new intervention to db.
+
+        Request Body:
+            application/json:
+                properties:
+                    libelle:
+                        type: string
+                        description: Libelle of intervention.
+                    description:
+                        type: string
+                        description: description of intervention.
+                    nom_intervenant:
+                        type: string
+                        description: nom_intervenant of intervention.
+                    lieu:
+                        type: string
+                        description: lieu of intervention.
+                    date_intervention:
+                        type: string
+                        description: date_intervention of intervention,should respect dd/mm/yyyy.
+                required:
+                    - libelle
+
+        Responses:
+            201:
+                description: success message.
+                content:
+                    application/json:
+                        example: {'Intervention created'}
+            400:
+                description: libelle not empty error message.
+                content:
+                    application/json:
+                        example: {Libelle cannot be empty'}
+        """
     data = request.get_json()
     libelle = data.get('libelle')
     description = data.get('description')
@@ -61,6 +100,33 @@ def create_intervention():
 
 @app.route('/interventions', methods=['GET'])
 def get_interventions():
+    """
+        GET /interventions
+        Returns a list of interventions.
+
+        Responses:
+            200:
+                description: list of dict interventions.
+                content:
+                    application/json:
+                        example: [
+                            {
+                                "date_intervention": "14/05/2024",
+                                "description": "This is an example intervention",
+                                "id": 1,
+                                "libelle": "Example intervention",
+                                "lieu": "France",
+                                "nom_intervenant": "Zhaoyi"
+                            },
+                            {
+                                "date_intervention": "14/05/2024",
+                                "description": "This is an example intervention",
+                                "id": 3,
+                                "libelle": "Example intervention",
+                                "lieu": "France",
+                                "nom_intervenant": "Zhaoyi"
+                            }]
+        """
     interventions = Intervention.query.all()
     if not interventions:
         return jsonify({'message': 'empty table'}), 404
@@ -83,6 +149,52 @@ def get_interventions():
 
 @app.route('/interventions/<int:id>', methods=['PUT'])
 def update_intervention(id):
+    """
+        PUT /interventions/<int:id>
+        Updates an existing intervention in the db.
+
+        Path Parameters:
+            id (int): The ID of the intervention to update.
+
+        Request Body:
+            application/json:
+                properties:
+                    libelle:
+                        type: string
+                        description: Libelle of intervention.
+                    description:
+                        type: string
+                        description: Description of intervention.
+                    nom_intervenant:
+                        type: string
+                        description: Nom_intervenant of intervention.
+                    lieu:
+                        type: string
+                        description: Lieu of intervention.
+                    date_intervention:
+                        type: string
+                        description: Date_intervention of intervention, should respect dd/mm/yyyy.
+
+                required:
+                    - libelle
+
+        Responses:
+            200:
+                description: Success message.
+                content:
+                    application/json:
+                        example: {'message': 'Intervention updated'}
+            400:
+                description: Libelle not empty error message.
+                content:
+                    application/json:
+                        example: {'message': 'Libelle cannot be empty'}
+            404:
+                description: Intervention not found error message.
+                content:
+                    application/json:
+                        example: {'message': 'Intervention not found'}
+        """
     data = request.get_json()
     intervention = Intervention.query.get_or_404(id)
     libelle = data['libelle']
@@ -108,6 +220,25 @@ def update_intervention(id):
 
 @app.route('/interventions/<int:id>', methods=['DELETE'])
 def delete_intervention(id):
+    """
+        DELETE /interventions/<int:id>
+        Deletes an existing intervention from the db.
+
+        Path Parameters:
+            id (int): The ID of the intervention to delete.
+
+        Responses:
+            200:
+                description: Success message.
+                content:
+                    application/json:
+                        example: {'message': 'Intervention deleted'}
+            404:
+                description: Intervention not found error message.
+                content:
+                    application/json:
+                        example: {'message': 'Intervention not found'}
+        """
     intervention = Intervention.query.get_or_404(id)
     db.session.delete(intervention)
     db.session.commit()
