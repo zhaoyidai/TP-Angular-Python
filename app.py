@@ -25,6 +25,9 @@ class Intervention(db.Model):
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'message': 'Intervention(s) not found'}), 404
+@app.errorhandler(400)
+def not_found(error):
+    return jsonify({"message': 'Bad request, libelle can't be empty"}), 400
 
 @app.route('/interventions', methods=['POST'])
 def create_intervention():

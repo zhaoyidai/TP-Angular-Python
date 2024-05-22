@@ -11,6 +11,8 @@
                 </div>
                 <!-- Form to add new intervention -->
                 <div class="shadow">
+                    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div> <!-- Ajouté pour les messages d'erreur -->
+            
                     <div class="input-group p-4">
                         
                         <div class="mb-3">

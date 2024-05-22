@@ -17,11 +17,13 @@ export class DashboardComponent implements OnInit {
   
   // Indicateur pour le tri ascendant/descendant
   sortAscending : boolean = true;
+  errorMessage: string = '';
   constructor(private crudService: CrudService) { }
 
   ngOnInit(): void {
     // Méthode exécutée à l'initialisation du composant
     // Initialisation des objets et du tableau
+    this.errorMessage = '';
     this.interventionObj=new Intervention();
     this.interventionArr=[];
     // Récupérer toutes les interventions
@@ -30,6 +32,7 @@ export class DashboardComponent implements OnInit {
 
   // Méthode pour récupérer toutes les interventions
   getAllIntervention() {
+    this.errorMessage = '';
     this.crudService.getAllIntervention().subscribe(
       (data: Intervention[]) => {
         this.interventionArr = data; // Assign the received data to the interventionArr array
@@ -38,38 +41,37 @@ export class DashboardComponent implements OnInit {
         
 
       },
-      (error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          alert("No data found");
-          }
-        }
+      (error: string) => {
+        this.errorMessage = error;
+      }
     );
   }
 
   // Méthode pour supprimer une intervention
   deleteIntervention(eintervention : Intervention) {
+    this.errorMessage = '';
     this.crudService.deleteIntervention(eintervention).subscribe(
       res=>{
         // Recharger des interventions après suppression
         this.ngOnInit();
         console.log(res);
       },error=>{
-        
-        console.error('Error deleting interventions:', error.error);
+        this.errorMessage = error;
+        console.error('Error deleting interventions:', error.error.message);
       }
     )
   }
 
   // Méthode pour ajouter une intervention
   addIntervention(){
-    
+    this.errorMessage = '';
     this.crudService.addIntervention(this.interventionObj).subscribe(
       res=>{
         // Recharger des interventions après ajout
         this.ngOnInit();
         alert(res.message);
       },err =>{
-        
+        this.errorMessage = err;
         alert(err.error.message);
       }
     )
@@ -77,12 +79,14 @@ export class DashboardComponent implements OnInit {
 
   // Méthode pour éditer une intervention
   editIntervention(){
-    
+    this.errorMessage = '';
     this.crudService.editIntervention(this.interventionObjedit).subscribe(res=>{
       // Rechargement des interventions après édition
       this.ngOnInit();
       alert(res.message);
     },err=>{
+      this.errorMessage = err;
+      console.log(err)
       alert("Failed to update");
     })
   } 
